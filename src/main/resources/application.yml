@@ -1,0 +1,29 @@
+server:
+  port: 8081
+# DataSource Config
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://8.131.60.144:3306/vue_admin?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 136957
+    hikari:
+      max-lifetime: 30000
+  redis:
+    host: 8.131.60.144
+    password: 136957
+  #security:
+    #user:
+      #name: user
+      #password: 123456
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**Mapper.xml
+  type-aliases-package: com.naown.entity
+naown:
+  jwt:
+    # 过期时间 (单位:秒)
+    expire: 604800
+    # 密钥 32位
+    secret: sadasdwq1fas54fsad4w1saf45asfqwe
+    # 头部 相当于一个常量
+    header: Authorization

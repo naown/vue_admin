@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.naown.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.naown.entity.User">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="avatar" property="avatar" />
+        <result column="email" property="email" />
+        <result column="city" property="city" />
+        <result column="created" property="created" />
+        <result column="updated" property="updated" />
+        <result column="last_login" property="lastLogin" />
+        <result column="status" property="status" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, username, password, avatar, email, city, created, updated, last_login, status
+    </sql>
+
+    <select id="listNavMenuIds" resultType="long">
+        SELECT DISTINCT
+            rm.menu_id
+        FROM
+            sys_user_role ur
+                LEFT JOIN sys_role_menu rm ON ur.role_id = rm.role_id
+        WHERE
+            ur.user_id = #{userId}
+    </select>
+
+    <select id="listUserByMenuId" resultType="user">
+        SELECT DISTINCT
+            su.*
+        FROM
+            sys_user_role ur
+                LEFT JOIN sys_role_menu rm ON ur.role_id = rm.role_id
+                LEFT JOIN sys_user su ON ur.user_id = su.id
+        WHERE
+            rm.menu_id = #{menuId}
+    </select>
+
+</mapper>

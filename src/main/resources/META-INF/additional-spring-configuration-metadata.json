@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "naown.jwt.expire",
+      "type": "java.lang.String",
+      "description": "Description for naown.jwt.expire."
+    },
+    {
+      "name": "naown.jwt.expire",
+      "type": "java.lang.String",
+      "description": "Description for naown.jwt.expire."
+    },
+    {
+      "name": "naown.jwt.expire",
+      "type": "java.lang.String",
+      "description": "Description for naown.jwt.expire."
+    }
+  ] }
