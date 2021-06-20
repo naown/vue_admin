@@ -3,6 +3,8 @@ package com.naown.common.handler;
 import com.naown.common.lang.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,12 +22,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    @ExceptionHandler({MethodArgumentNotValidException.class, BindException.class})
     public Result handle(MethodArgumentNotValidException e){
         BindingResult result = e.getBindingResult();
         ObjectError objectError = result.getAllErrors().stream().findFirst().get();
         log.error("实体校验异常:{}",objectError.getDefaultMessage());
-        return Result.error(e.getMessage());
+        return Result.error(objectError.getDefaultMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -39,6 +41,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = RuntimeException.class)
     public Result handle(RuntimeException e){
         log.error("运行时异常:{}",e.getMessage());
+        return Result.error(e.getMessage());
+    }
+
+    /**
+     * 权限异常
+     * @param e
+     * @return
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public Result handle(AccessDeniedException e){
+        log.error("权限异常:{}",e.getMessage());
         return Result.error(e.getMessage());
     }
 }

@@ -31,6 +31,7 @@ public class MenuController extends BaseController {
      */
     @GetMapping("/nav")
     public Result getNav(Principal principal){
+        long currentTimeMillis = System.currentTimeMillis();
         User user = userService.getByUserName(principal.getName());
 
         // 获取权限信息
@@ -40,6 +41,8 @@ public class MenuController extends BaseController {
         // 获取导航栏信息
         List<MenuNavDTO> navs = menuService.getCurrentUserNav();
 
+        long timeMillis = System.currentTimeMillis();
+        System.out.println("共执行"+((timeMillis - currentTimeMillis))+ "豪秒");
         return Result.succeed(MapUtil.builder()
                 .put("authorizations",authorityInfoArray)
                 .put("nav",navs)

@@ -25,8 +25,15 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         httpServletResponse.setContentType("application/json; charset=UTF-8");
 
         try(ServletOutputStream outputStream = httpServletResponse.getOutputStream()) {
-            outputStream.write(JSONUtil.toJsonStr(Result.error("用户名或密码不正确")).getBytes(StandardCharsets.UTF_8));
+            outputStream.write(JSONUtil.toJsonStr(Result.error(errorMessage(e))).getBytes(StandardCharsets.UTF_8));
             outputStream.flush();
         }
+    }
+
+    public String errorMessage(AuthenticationException e){
+        if (e.getMessage().contains("验证码")){
+            return e.getMessage();
+        }
+        return "用户名或密码不正确";
     }
 }

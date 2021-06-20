@@ -1,10 +1,10 @@
 package com.naown.config;
 
 import com.naown.security.*;
-import com.naown.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 /**
  * Security配置类
+ * @EnableGlobalMethodSecurity 作用是启用注解形式配置权限 prePostEnabled是代表使用哪种类型的注解 prePostEnabled是在方法访问前就进行权限校验
  * @author: chenjian
  * @since: 2021/5/12 23:41 周三
  **/
@@ -51,37 +52,41 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
         // 登录配置
         .formLogin()
-                // 成功处理器
-                .successHandler(loginSuccessHandler)
-                // 失败处理器
-                .failureHandler(loginFailureHandler)
+            // 成功处理器
+            .successHandler(loginSuccessHandler)
+            // 失败处理器
+            .failureHandler(loginFailureHandler)
+        /*.and()
+        TODO 可以配置退出登录逻辑
+            .logout()*/
         .and()
-                // 退出处理器
-                .logout()
-                .logoutSuccessHandler(logoutHandler)
+            // 退出处理器
+            .logout()
+            .logoutSuccessHandler(logoutHandler)
         // 禁用session
         .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         // 配置拦截规则
         .and()
-                .authorizeRequests()
-                .antMatchers(URL_WHITE_LIST)
-                .permitAll()
-                .anyRequest()
-                .authenticated()
+            .authorizeRequests()
+            // 放行路由
+            .antMatchers(URL_WHITE_LIST).permitAll()
+            // 放行OPTIONS请求
+            .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .anyRequest()
+            .authenticated()
         // 异常处理器
         .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(tokenAuthenticationEntryPoint)
-                .accessDeniedHandler(tokenAccessDeniedHandler)
+            .exceptionHandling()
+            .authenticationEntryPoint(tokenAuthenticationEntryPoint)
+            .accessDeniedHandler(tokenAccessDeniedHandler)
         // 配置自定义过滤器
         .and()
-                // 配置自定义过滤器，过滤时机在UsernamePasswordAuthenticationFilter之前
-                .addFilterBefore(captchaFilter, UsernamePasswordAuthenticationFilter.class)
-                // 配置自己定义token过滤器
-                .addFilter(tokenAuthenticationFilter());
-        //super.configure(http);
+            // 配置自定义过滤器，过滤时机在UsernamePasswordAuthenticationFilter之前
+            .addFilterBefore(captchaFilter, UsernamePasswordAuthenticationFilter.class)
+            // 配置自己定义token过滤器
+            .addFilter(tokenAuthenticationFilter());
     }
 
     @Override
