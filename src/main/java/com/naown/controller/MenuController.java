@@ -7,6 +7,7 @@ import com.naown.common.lang.Result;
 import com.naown.entity.Menu;
 import com.naown.entity.RoleMenu;
 import com.naown.entity.User;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +31,7 @@ public class MenuController extends BaseController {
      * @return Result
      */
     @GetMapping("/nav")
+    @Cacheable(value = "menu:nav",key = "#principal.name")
     public Result getNav(Principal principal){
         long currentTimeMillis = System.currentTimeMillis();
         User user = userService.getByUserName(principal.getName());
