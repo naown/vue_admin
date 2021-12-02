@@ -1,13 +1,10 @@
 package com.naown.controller;
 
-import cn.hutool.core.lang.UUID;
 import cn.hutool.core.map.MapUtil;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.naown.common.lang.Const;
 import com.naown.common.lang.Result;
 import com.naown.entity.User;
-import com.naown.service.IUserService;
-import com.naown.utils.RedisUtil;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +36,7 @@ public class AuthController extends BaseController {
     public Result captcha(){
         //String key = UUID.randomUUID().toString();
         //String code = defaultKaptcha.createText();
-
+        // 测试
         String key = "aaaaa";
         String code = "11111";
         BufferedImage image = defaultKaptcha.createImage(code);
